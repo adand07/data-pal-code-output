@@ -40,7 +40,15 @@ public class Truck {
     }
 
     public void returnFromInspection(int odometerReading) {
-        // TODO: implement for lab exercise
+        if (status != TruckStatus.IN_INSPECTION) {
+            throw new IllegalStateException("Truck is not currently in inspection");
+        }
+        if (this.odometerReading > odometerReading) {
+            throw new IllegalArgumentException("Odometer reading cannot be less than previous reading");
+        }
+
+        this.status = TruckStatus.RENTABLE;
+        this.odometerReading = odometerReading;
     }
 
     public void reserve() {
@@ -52,55 +60,51 @@ public class Truck {
     }
 
     public void pickUp() {
-        // TODO: implement for lab exercise
+        if (status != TruckStatus.RESERVED) {
+            throw new IllegalStateException("Only reserved trucks can be picked up");
+        }
+
+        this.status = TruckStatus.RENTED;
     }
 
     public void returnToService(int odometerReading) {
-        // TODO: implement for lab exercise
+        if (status != TruckStatus.RENTED) {
+            throw new IllegalStateException("Truck is not currently rented");
+        }
+        if (this.odometerReading > odometerReading) {
+            throw new IllegalArgumentException("Odometer reading cannot be less than previous reading");
+        }
+
+        this.status = TruckStatus.RENTABLE;
+        this.odometerReading = odometerReading;
     }
 
     public void sendForInspection() {
-        // TODO: implement for lab exercise
+        if (status != TruckStatus.RENTABLE) {
+            throw new IllegalStateException("Truck cannot be inspected");
+        }
+
+        this.status = TruckStatus.IN_INSPECTION;
     }
 
     public Vin getVin() {
         return vin;
     }
 
-    public void setVin(Vin vin) {
-        this.vin = vin;
-    }
-
     public TruckStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(TruckStatus status) {
-        this.status = status;
     }
 
     public Integer getOdometerReading() {
         return odometerReading;
     }
 
-    public void setOdometerReading(Integer odometerReading) {
-        this.odometerReading = odometerReading;
-    }
-
     public TruckSize getTruckSize() {
         return truckSize;
     }
 
-    public void setTruckSize(TruckSize truckSize) {
-        this.truckSize = truckSize;
-    }
-
     public Integer getTruckLength() {
         return truckLength;
-    }
-
-    public void setTruckLength(Integer truckLength) {
-        this.truckLength = truckLength;
     }
 
     @Override

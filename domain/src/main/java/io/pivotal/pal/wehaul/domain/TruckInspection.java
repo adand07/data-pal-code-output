@@ -38,32 +38,16 @@ public class TruckInspection {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public Vin getTruckVin() {
         return truckVin;
-    }
-
-    public void setTruckVin(Vin truckVin) {
-        this.truckVin = truckVin;
     }
 
     public Integer getOdometerReading() {
         return odometerReading;
     }
 
-    public void setOdometerReading(Integer odometerReading) {
-        this.odometerReading = odometerReading;
-    }
-
     public String getNotes() {
         return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     @Override

@@ -30,43 +30,38 @@ public class Rental {
     }
 
     public void pickUp() {
-        // TODO: implement for lab exercise
+        if (distanceTraveled != null) {
+            throw new IllegalStateException("Rental has already been picked up");
+        }
+
+        distanceTraveled = 0;
     }
 
     public void dropOff(int distanceTraveled) {
-        // TODO: implement for lab exercise
+        if (this.distanceTraveled == null) {
+            throw new IllegalStateException("Cannot drop off before picking up rental");
+        }
+        if (this.distanceTraveled != 0) {
+            throw new IllegalStateException("Rental is already dropped off");
+        }
+
+        this.distanceTraveled = distanceTraveled;
     }
 
     public ConfirmationNumber getConfirmationNumber() {
         return confirmationNumber;
     }
 
-    public void setConfirmationNumber(ConfirmationNumber confirmationNumber) {
-        this.confirmationNumber = confirmationNumber;
-    }
-
     public String getCustomerName() {
         return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
     }
 
     public Vin getTruckVin() {
         return truckVin;
     }
 
-    public void setTruckVin(Vin truckVin) {
-        this.truckVin = truckVin;
-    }
-
     public Integer getDistanceTraveled() {
         return distanceTraveled;
-    }
-
-    public void setDistanceTraveled(Integer distanceTraveled) {
-        this.distanceTraveled = distanceTraveled;
     }
 
     @Override
