@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9c0dfaf9-0ce9-448b-8565-04c4df3c9014",
+		"_postman_id": "54d6a5b4-3ed6-4acd-8fb5-2302c69e34e2",
 		"name": "WeHaul",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -15,13 +15,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "localhost:8080/fleet/trucks",
+					"raw": "localhost:8080/trucks",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"fleet",
 						"trucks"
 					]
 				}
@@ -40,7 +39,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"customerName\": \"some-customer-name\",\n\t\"truckSize\": \"LARGE\"\n}"
+					"raw": "{\n\t\"customerName\": \"some-customer-name\"\n}"
 				},
 				"url": {
 					"raw": "localhost:8080/rentals",
@@ -92,14 +91,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "localhost:8080/rentals/0f39f880-9328-4b48-99fc-11fc5dc47520/pick-up",
+					"raw": "localhost:8080/rentals/a3082317-5470-4ca0-8c15-cd15ee72590e/pick-up",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"rentals",
-						"0f39f880-9328-4b48-99fc-11fc5dc47520",
+						"a3082317-5470-4ca0-8c15-cd15ee72590e",
 						"pick-up"
 					]
 				}
@@ -121,15 +120,37 @@
 					"raw": "{\n\t\"distanceTraveled\": 200\n}"
 				},
 				"url": {
-					"raw": "localhost:8080/rentals/0f39f880-9328-4b48-99fc-11fc5dc47520/drop-off",
+					"raw": "localhost:8080/rentals/a3082317-5470-4ca0-8c15-cd15ee72590e/drop-off",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"rentals",
-						"0f39f880-9328-4b48-99fc-11fc5dc47520",
+						"a3082317-5470-4ca0-8c15-cd15ee72590e",
 						"drop-off"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Miles Since Last Inspection by Truck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/truck-since-inspections",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"truck-since-inspections"
 					]
 				}
 			},
@@ -147,16 +168,15 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"vin\": \"test-0003\",\n\t\"odometerReading\": 1,\n\t\"truckLength\": 25\n}"
+					"raw": "{\n\t\"vin\": \"test-0002\",\n\t\"odometerReading\": 1\n}"
 				},
 				"url": {
-					"raw": "localhost:8080/fleet/trucks",
+					"raw": "localhost:8080/trucks",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"fleet",
 						"trucks"
 					]
 				}
@@ -178,15 +198,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "localhost:8080/fleet/trucks/test-0003/send-for-inspection",
+					"raw": "localhost:8080/trucks/test-0001/send-for-inspection",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"fleet",
 						"trucks",
-						"test-0003",
+						"test-0001",
 						"send-for-inspection"
 					]
 				}
@@ -208,15 +227,14 @@
 					"raw": "{\n\t\"notes\": \"inspection passed\",\n\t\"odometerReading\": 100\n}"
 				},
 				"url": {
-					"raw": "localhost:8080/fleet/trucks/test-0003/return-from-inspection",
+					"raw": "localhost:8080/trucks/test-0001/return-from-inspection",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"fleet",
 						"trucks",
-						"test-0003",
+						"test-0001",
 						"return-from-inspection"
 					]
 				}
