@@ -1,8 +1,10 @@
 package io.pivotal.pal.wehaul.config;
 
-import io.pivotal.pal.wehaul.fleet.domain.FleetTruck;
-import io.pivotal.pal.wehaul.fleet.domain.FleetTruckRepository;
-import io.pivotal.pal.wehaul.fleet.domain.MakeModel;
+import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruckRepository;
+import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruck;
+import io.pivotal.pal.wehaul.fleet.domain.command.MakeModel;
+import io.pivotal.pal.wehaul.fleet.domain.query.FleetTruckQueryRepository;
+import io.pivotal.pal.wehaul.fleet.domain.query.FleetTruckSnapshot;
 import io.pivotal.pal.wehaul.rental.domain.RentalTruck;
 import io.pivotal.pal.wehaul.rental.domain.RentalTruckRepository;
 import io.pivotal.pal.wehaul.rental.domain.RentalTruckSize;
@@ -15,11 +17,14 @@ public class DatabaseSeedConfig {
 
     private final FleetTruckRepository fleetTruckRepository;
     private final RentalTruckRepository rentalTruckRepository;
+    private final FleetTruckQueryRepository fleetTruckQueryRepository;
 
     public DatabaseSeedConfig(FleetTruckRepository fleetTruckRepository,
-                              RentalTruckRepository rentalTruckRepository) {
+                              RentalTruckRepository rentalTruckRepository,
+                              FleetTruckQueryRepository fleetTruckQueryRepository) {
         this.fleetTruckRepository = fleetTruckRepository;
         this.rentalTruckRepository = rentalTruckRepository;
+        this.fleetTruckQueryRepository = fleetTruckQueryRepository;
     }
 
     @PostConstruct
@@ -29,6 +34,8 @@ public class DatabaseSeedConfig {
         FleetTruck inInspectionFleetTruck =
                 new FleetTruck(vin, 0, new MakeModel("TruckCo", "The Big One"));
         fleetTruckRepository.save(inInspectionFleetTruck);
+        fleetTruckQueryRepository.save(new FleetTruckSnapshot(inInspectionFleetTruck.getVin(), inInspectionFleetTruck.getStatus().toString(),
+                inInspectionFleetTruck.getOdometerReading(), inInspectionFleetTruck.getMakeModel().getMake(), inInspectionFleetTruck.getMakeModel().getModel()));
 
         RentalTruck unrentableRentalTruck = new RentalTruck(vin, RentalTruckSize.LARGE);
         unrentableRentalTruck.preventRenting();
@@ -41,8 +48,11 @@ public class DatabaseSeedConfig {
                 new FleetTruck(vin2, 0, new MakeModel("TruckCo", "The Small One"));
         inspectableFleetTruck.returnFromInspection("some notes", 0);
         fleetTruckRepository.save(inspectableFleetTruck);
+        fleetTruckQueryRepository.save(new FleetTruckSnapshot(inspectableFleetTruck.getVin(), inspectableFleetTruck.getStatus().toString(),
+                inspectableFleetTruck.getOdometerReading(), inspectableFleetTruck.getMakeModel().getMake(), inspectableFleetTruck.getMakeModel().getModel()));
 
         RentalTruck rentableRentalTruck = new RentalTruck(vin2, RentalTruckSize.SMALL);
         rentalTruckRepository.save(rentableRentalTruck);
+
     }
 }

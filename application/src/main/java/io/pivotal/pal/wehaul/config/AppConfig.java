@@ -1,8 +1,8 @@
 package io.pivotal.pal.wehaul.config;
 
-import io.pivotal.pal.wehaul.adapter.FleetTruckEventSourcedRepository;
-import io.pivotal.pal.wehaul.event.store.FleetTruckEventStoreRepository;
-import io.pivotal.pal.wehaul.fleet.domain.FleetTruckRepository;
+import io.pivotal.pal.wehaul.fleet.FleetTruckEventSourcedRepository;
+import io.pivotal.pal.wehaul.fleet.FleetTruckEventStoreRepository;
+import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruckRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
