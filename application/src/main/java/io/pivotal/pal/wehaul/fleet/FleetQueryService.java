@@ -5,7 +5,8 @@ import io.pivotal.pal.wehaul.fleet.domain.query.FleetTruckSnapshot;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class FleetQueryService {
@@ -16,10 +17,12 @@ public class FleetQueryService {
     }
 
     public Collection<FleetTruckSnapshot> findAll() {
-        return Collections.emptyList();
+        return StreamSupport
+                .stream(fleetTruckQueryRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     public FleetTruckSnapshot findOne(String vin) {
-        return null;
+        return fleetTruckQueryRepository.findOne(vin);
     }
 }

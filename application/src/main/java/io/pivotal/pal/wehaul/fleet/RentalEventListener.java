@@ -10,19 +10,19 @@ import org.springframework.stereotype.Component;
 @Async
 public class RentalEventListener {
 
-    private final FleetService fleetService;
+    private final FleetCommandService fleetCommandService;
 
-    public RentalEventListener(FleetService fleetService) {
-        this.fleetService = fleetService;
+    public RentalEventListener(FleetCommandService fleetCommandService) {
+        this.fleetCommandService = fleetCommandService;
     }
 
     @EventListener
     public void onRentalTruckReserved(RentalTruckReserved event) {
-        fleetService.removeTruckFromYard(event.getVin());
+        fleetCommandService.removeTruckFromYard(event.getVin());
     }
 
     @EventListener
     public void onRentalTruckDroppedOff(RentalTruckDroppedOff event) {
-        fleetService.returnTruckToYard(event.getVin(), event.getDistanceTraveled());
+        fleetCommandService.returnTruckToYard(event.getVin(), event.getDistanceTraveled());
     }
 }

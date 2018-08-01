@@ -2,7 +2,7 @@ package io.pivotal.pal.wehaul.fleet;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruck;
+import io.pivotal.pal.wehaul.fleet.domain.query.FleetTruckSnapshot;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +12,23 @@ import java.util.Collection;
 @RequestMapping("/fleet/trucks")
 public class FleetController {
 
-    private final FleetService fleetService;
+    private final FleetCommandService fleetCommandService;
+    private final FleetQueryService fleetQueryService;
 
-    public FleetController(FleetService fleetService) {
-        this.fleetService = fleetService;
+    public FleetController(FleetCommandService fleetCommandService, FleetQueryService fleetQueryService) {
+        this.fleetCommandService = fleetCommandService;
+        this.fleetQueryService = fleetQueryService;
     }
 
     @GetMapping
-    public ResponseEntity<Collection<FleetTruck>> getAllTrucks() {
-        Collection<FleetTruck> trucks = fleetService.findAll();
+    public ResponseEntity<Collection<FleetTruckSnapshot>> getAllTrucks() {
+        Collection<FleetTruckSnapshot> trucks = fleetQueryService.findAll();
         return ResponseEntity.ok(trucks);
     }
 
     @GetMapping("/{vin}")
-    public ResponseEntity<FleetTruck> getTruck(@PathVariable String vin) {
-        FleetTruck truck = fleetService.findOne(vin);
+    public ResponseEntity<FleetTruckSnapshot> getTruck(@PathVariable String vin) {
+        FleetTruckSnapshot truck = fleetQueryService.findOne(vin);
         return ResponseEntity.ok(truck);
     }
 
@@ -36,7 +38,7 @@ public class FleetController {
         String vin = buyTruckDto.getVin();
         int odometerReading = buyTruckDto.getOdometerReading();
 
-        fleetService.buyTruck(vin, odometerReading);
+        fleetCommandService.buyTruck(vin, odometerReading);
 
         return ResponseEntity.ok().build();
     }
@@ -44,7 +46,7 @@ public class FleetController {
     @PostMapping("/{vin}/send-for-inspection")
     public ResponseEntity<Void> sendTruckForInspection(@PathVariable String vin) {
 
-        fleetService.sendTruckForInspection(vin);
+        fleetCommandService.sendTruckForInspection(vin);
 
         return ResponseEntity.ok().build();
     }
@@ -58,7 +60,7 @@ public class FleetController {
         String notes = returnTruckFromInspectionDto.getNotes();
         int odometerReading = returnTruckFromInspectionDto.getOdometerReading();
 
-        fleetService.returnTruckFromInspection(vin, notes, odometerReading);
+        fleetCommandService.returnTruckFromInspection(vin, notes, odometerReading);
 
         return ResponseEntity.ok().build();
     }

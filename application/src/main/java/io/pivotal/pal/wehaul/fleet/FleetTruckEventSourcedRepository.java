@@ -3,21 +3,19 @@ package io.pivotal.pal.wehaul.fleet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruckRepository;
 import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruck;
+import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruckCommandRepository;
 import io.pivotal.pal.wehaul.fleet.domain.command.event.FleetTruckEvent;
 import io.pivotal.pal.wehaul.fleet.domain.query.FleetTruckUpdatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Sort;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FleetTruckEventSourcedRepository implements FleetTruckRepository {
+public class FleetTruckEventSourcedRepository implements FleetTruckCommandRepository {
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -80,20 +78,6 @@ public class FleetTruckEventSourcedRepository implements FleetTruckRepository {
         List<FleetTruckEvent> fleetTruckEvents = mapEntitiesToEvents(eventEntities);
 
         return new FleetTruck(fleetTruckEvents);
-    }
-
-    public List<FleetTruck> findAll() {
-        Map<String, List<FleetTruckEventStoreEntity>> eventEntitiesByVin =
-                eventStoreRepository.findAll(new Sort(Sort.Direction.ASC, "key.vin", "key.version"))
-                        .stream()
-                        .collect(Collectors.groupingBy(eventEntity -> eventEntity.getKey().getVin()));
-
-        return eventEntitiesByVin.entrySet()
-                .stream()
-                .map(eventEntities -> mapEntitiesToEvents(eventEntities.getValue()))
-                .map(FleetTruck::new)
-                .sorted(Comparator.comparing(FleetTruck::getVin))
-                .collect(Collectors.toList());
     }
 
     private List<FleetTruckEvent> mapEntitiesToEvents(List<FleetTruckEventStoreEntity> eventEntities) {

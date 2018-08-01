@@ -1,25 +1,21 @@
 package io.pivotal.pal.wehaul.fleet;
 
-import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruckRepository;
 import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruck;
+import io.pivotal.pal.wehaul.fleet.domain.command.FleetTruckCommandRepository;
 import io.pivotal.pal.wehaul.fleet.domain.command.MakeModel;
 import io.pivotal.pal.wehaul.fleet.domain.command.TruckInfoLookupClient;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Service
-public class FleetService {
+public class FleetCommandService {
 
     private final TruckInfoLookupClient truckInfoLookupClient;
-    private final FleetTruckRepository fleetTruckRepository;
+    private final FleetTruckCommandRepository fleetTruckCommandRepository;
 
-    public FleetService(TruckInfoLookupClient truckInfoLookupClient,
-                        FleetTruckRepository fleetTruckRepository) {
+    public FleetCommandService(TruckInfoLookupClient truckInfoLookupClient,
+                               FleetTruckCommandRepository fleetTruckCommandRepository) {
         this.truckInfoLookupClient = truckInfoLookupClient;
-        this.fleetTruckRepository = fleetTruckRepository;
+        this.fleetTruckCommandRepository = fleetTruckCommandRepository;
     }
 
     public void buyTruck(String vin, int odometerReading) {
@@ -27,22 +23,22 @@ public class FleetService {
 
         FleetTruck truck = new FleetTruck(vin, odometerReading, makeModel);
 
-        fleetTruckRepository.save(truck);
+        fleetTruckCommandRepository.save(truck);
     }
 
     public void returnTruckFromInspection(String vin, String notes, int odometerReading) {
-        FleetTruck truck = fleetTruckRepository.findOne(vin);
+        FleetTruck truck = fleetTruckCommandRepository.findOne(vin);
 
         if (truck == null) {
             throw new IllegalArgumentException(String.format("No truck found with VIN=%s", vin));
         }
 
         truck.returnFromInspection(notes, odometerReading);
-        fleetTruckRepository.save(truck);
+        fleetTruckCommandRepository.save(truck);
     }
 
     public void sendTruckForInspection(String vin) {
-        FleetTruck truck = fleetTruckRepository.findOne(vin);
+        FleetTruck truck = fleetTruckCommandRepository.findOne(vin);
 
         if (truck == null) {
             throw new IllegalArgumentException(String.format("No truck found with VIN=%s", vin));
@@ -50,11 +46,11 @@ public class FleetService {
 
         truck.sendForInspection();
 
-        fleetTruckRepository.save(truck);
+        fleetTruckCommandRepository.save(truck);
     }
 
     public void removeTruckFromYard(String vin) {
-        FleetTruck truck = fleetTruckRepository.findOne(vin);
+        FleetTruck truck = fleetTruckCommandRepository.findOne(vin);
 
         if (truck == null) {
             throw new IllegalArgumentException(String.format("No truck found with VIN=%s", vin));
@@ -62,11 +58,11 @@ public class FleetService {
 
         truck.removeFromYard();
 
-        fleetTruckRepository.save(truck);
+        fleetTruckCommandRepository.save(truck);
     }
 
     public void returnTruckToYard(String vin, int distanceTraveled) {
-        FleetTruck truck = fleetTruckRepository.findOne(vin);
+        FleetTruck truck = fleetTruckCommandRepository.findOne(vin);
 
         if (truck == null) {
             throw new IllegalArgumentException(String.format("No truck found with VIN=%s", vin));
@@ -74,16 +70,6 @@ public class FleetService {
 
         truck.returnToYard(distanceTraveled);
 
-        fleetTruckRepository.save(truck);
-    }
-
-    public Collection<FleetTruck> findAll() {
-        return StreamSupport
-                .stream(fleetTruckRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-    }
-
-    public FleetTruck findOne(String vin) {
-        return fleetTruckRepository.findOne(vin);
+        fleetTruckCommandRepository.save(truck);
     }
 }

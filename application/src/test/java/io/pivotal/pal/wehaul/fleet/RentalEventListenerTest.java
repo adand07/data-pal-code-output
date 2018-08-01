@@ -21,7 +21,7 @@ public class RentalEventListenerTest {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @MockBean
-    private FleetService mockFleetService;
+    private FleetCommandService mockFleetCommandService;
 
     @Test
     public void onRentalTruckReserved() {
@@ -31,7 +31,7 @@ public class RentalEventListenerTest {
 
         applicationEventPublisher.publishEvent(new RentalTruckReserved(mockRentalTruck));
 
-        verify(mockFleetService, timeout(100)).removeTruckFromYard(vin);
+        verify(mockFleetCommandService, timeout(100)).removeTruckFromYard(vin);
     }
 
     @Test
@@ -43,6 +43,6 @@ public class RentalEventListenerTest {
         int distanceTraveled = 100;
         applicationEventPublisher.publishEvent(new RentalTruckDroppedOff(mockRentalTruck, distanceTraveled));
 
-        verify(mockFleetService, timeout(100)).returnTruckToYard(vin, distanceTraveled);
+        verify(mockFleetCommandService, timeout(100)).returnTruckToYard(vin, distanceTraveled);
     }
 }
